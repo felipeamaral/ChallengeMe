@@ -17,6 +17,7 @@ public class SplashFragment extends Fragment {
 	        ViewGroup container, Bundle savedInstanceState) {
 	    View view = inflater.inflate(R.layout.splash, 
 	            container, false);
+	    /* Permissions Faceboo */
 	    LoginButton authButton = (LoginButton) view.findViewById(R.id.login_button);
 	    authButton.setReadPermissions(Arrays.asList("user_friends","public_profile"));
 	    return view;
