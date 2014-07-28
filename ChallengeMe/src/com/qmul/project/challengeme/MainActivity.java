@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity {
 	    super.onCreate(savedInstanceState);
 	    uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);
-	    
+	//olaaaaaa    
 	    setContentView(R.layout.activity_main);
 
 	    FragmentManager fm = getSupportFragmentManager();
