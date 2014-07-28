@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity {
 	    super.onCreate(savedInstanceState);
 	    uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);
+	    //London
 	//olaaaaaa    
 	    setContentView(R.layout.activity_main);
 
