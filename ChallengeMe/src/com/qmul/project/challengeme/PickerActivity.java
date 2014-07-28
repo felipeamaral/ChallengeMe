@@ -15,7 +15,7 @@ import com.facebook.widget.PickerFragment;
 public class PickerActivity extends FragmentActivity {
 	public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
 	private FriendPickerFragment friendPickerFragment;
-	
+//olaaaaaa	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
