@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/challenges"
+          android:icon="@drawable/logo"
+          android:title="@string/challenges"
+          android:showAsAction="always" />
+</menu>
