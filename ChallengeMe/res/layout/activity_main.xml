@@ -17,4 +17,8 @@
           android:id="@+id/userSettingsFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent" />
+    <fragment android:name="com.qmul.project.challengeme.HistoryFragment"
+          android:id="@+id/historyFragment"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity {
@@ -18,7 +19,8 @@ public class MainActivity extends FragmentActivity {
 	private static final int SPLASH = 0;
 	private static final int SELECTION = 1;
 	private static final int SETTINGS = 2;
-	private static final int FRAGMENT_COUNT = SETTINGS +1;
+	private static final int HISTORY = 3;
+	private static final int FRAGMENT_COUNT = HISTORY +1;
 	private boolean isResumed = false;
 	private MenuItem settings;
 
@@ -37,6 +39,7 @@ public class MainActivity extends FragmentActivity {
 	    fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);
 	    fragments[SELECTION] = fm.findFragmentById(R.id.selectionFragment);
 	    fragments[SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
+	    fragments[HISTORY] = fm.findFragmentById(R.id.historyFragment);
 
 	    FragmentTransaction transaction = fm.beginTransaction();
 	    for(int i = 0; i < fragments.length; i++) {
@@ -66,6 +69,8 @@ public class MainActivity extends FragmentActivity {
 	    // only add the menu when the selection fragment is showing
 	    if (fragments[SELECTION].isVisible()) {
 	        if (menu.size() == 0) {
+	        	MenuInflater inflater = getMenuInflater();
+	            inflater.inflate(R.menu.menu_actions, menu);
 	            settings = menu.add(R.string.settings);
 	        }
 	        return true;
@@ -82,6 +87,10 @@ public class MainActivity extends FragmentActivity {
 	        showFragment(SETTINGS, true);
 	        return true;
 	    }
+	    if (item.getItemId()==R.id.challenges) {
+	        showFragment(HISTORY, true);
+	        return true;
+	    } 
 	    return false;
 	}
 	
