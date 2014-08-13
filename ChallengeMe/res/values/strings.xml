@@ -13,5 +13,10 @@
 	<string name="two_users_selected">%1$s and %2$s</string>
 	<string name="multiple_users_selected">%1$s and %2$s others</string>
 	<string name="challenges">challenges</string>
-	
+	<string name="logout">logout</string>
+	<string name="action_sport">Which Sport?</string>
+	<string name="action_sport_default">Select one</string>
+	<string name="action_challenge">Which Challenge?</string>
+	<string name="action_challenge_default">Select one</string>
+
 </resources>

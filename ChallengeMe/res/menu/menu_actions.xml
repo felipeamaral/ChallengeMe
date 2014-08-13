@@ -1,6 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
     <item android:id="@+id/challenges"
-          android:icon="@drawable/logo"
+          android:icon="@drawable/ic_action_colletctions"
           android:title="@string/challenges"
           android:showAsAction="always" />
+    
+    <item android:id="@+id/logout"
+          android:icon="@drawable/ic_action_remove"
+          android:title="@string/logout"
+          android:showAsAction="always" />
+    
+    
 </menu>

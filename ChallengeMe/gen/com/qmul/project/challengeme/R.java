@@ -198,7 +198,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020013;
         public static final int com_facebook_loginbutton_silver=0x7f020014;
         public static final int com_facebook_logo=0x7f020015;
-        public static final int com_facebook_picker_default_separator_color=0x7f020036;
+        public static final int com_facebook_picker_default_separator_color=0x7f020039;
         public static final int com_facebook_picker_item_background=0x7f020016;
         public static final int com_facebook_picker_list_focused=0x7f020017;
         public static final int com_facebook_picker_list_longpressed=0x7f020018;
@@ -224,16 +224,19 @@ containing a value of this type.
         public static final int com_facebook_top_button=0x7f02002c;
         public static final int com_facebook_usersettingsfragment_background_gradient=0x7f02002d;
         public static final int facebook=0x7f02002e;
-        public static final int ic_launcher=0x7f02002f;
-        public static final int icon=0x7f020030;
-        public static final int logo=0x7f020031;
-        public static final int logo_2=0x7f020032;
-        public static final int logo_3=0x7f020033;
-        public static final int target=0x7f020034;
-        public static final int title_bar_logo=0x7f020035;
+        public static final int ic_action_collections=0x7f02002f;
+        public static final int ic_action_remove=0x7f020030;
+        public static final int ic_launcher=0x7f020031;
+        public static final int icon=0x7f020032;
+        public static final int logo=0x7f020033;
+        public static final int logo_2=0x7f020034;
+        public static final int logo_3=0x7f020035;
+        public static final int logout=0x7f020036;
+        public static final int target=0x7f020037;
+        public static final int title_bar_logo=0x7f020038;
     }
     public static final class id {
-        public static final int challenges=0x7f04002d;
+        public static final int challenges=0x7f04002b;
         public static final int com_facebook_body_frame=0x7f040019;
         public static final int com_facebook_button_xout=0x7f04001b;
         public static final int com_facebook_login_activity_progress_bar=0x7f040009;
@@ -262,20 +265,19 @@ containing a value of this type.
         public static final int historyFragment=0x7f040006;
         public static final int icon=0x7f040021;
         public static final int large=0x7f040002;
-        public static final int login_button=0x7f04002c;
+        public static final int login_button=0x7f04002a;
+        public static final int logout=0x7f04002c;
         public static final int normal=0x7f040001;
         public static final int picker_fragment=0x7f040024;
         public static final int picker_subtitle=0x7f040016;
-        public static final int profile_name=0x7f04002b;
+        public static final int profile_name=0x7f040029;
         public static final int selectionFragment=0x7f040003;
         public static final int selection_list=0x7f040027;
         public static final int selection_profile_pic=0x7f040025;
-        public static final int selection_sport_list=0x7f040029;
-        public static final int selection_sport_type=0x7f040028;
         public static final int selection_user_name=0x7f040026;
         public static final int small=0x7f040000;
         public static final int splashFragment=0x7f040004;
-        public static final int splash_icon=0x7f04002a;
+        public static final int splash_icon=0x7f040028;
         public static final int text1=0x7f040022;
         public static final int text2=0x7f040023;
         public static final int userSettingsFragment=0x7f040005;
@@ -307,8 +309,12 @@ containing a value of this type.
         public static final int menu_actions=0x7f090000;
     }
     public static final class string {
+        public static final int action_challenge=0x7f070029;
+        public static final int action_challenge_default=0x7f07002a;
         public static final int action_people=0x7f07001e;
         public static final int action_people_default=0x7f07001f;
+        public static final int action_sport=0x7f070027;
+        public static final int action_sport_default=0x7f070028;
         public static final int app_id=0x7f07001b;
         public static final int app_name=0x7f07001a;
         public static final int challenges=0x7f070025;
@@ -341,6 +347,7 @@ containing a value of this type.
         public static final int error_dialog_button_text=0x7f070021;
         public static final int error_dialog_title=0x7f070020;
         public static final int get_started=0x7f07001c;
+        public static final int logout=0x7f070026;
         public static final int multiple_users_selected=0x7f070024;
         public static final int settings=0x7f07001d;
         public static final int single_user_selected=0x7f070022;

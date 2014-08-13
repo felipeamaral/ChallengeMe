@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity {
 	        if (menu.size() == 0) {
 	        	MenuInflater inflater = getMenuInflater();
 	            inflater.inflate(R.menu.menu_actions, menu);
-	            settings = menu.add(R.string.settings);
+	            //settings = menu.add(R.string.settings);
 	        }
 	        return true;
 	    } else {
@@ -83,10 +83,17 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    if (item.equals(settings)) {
+	    /*
+		if (item.equals(settings)) {
 	        showFragment(SETTINGS, true);
 	        return true;
+	    }*/
+	    
+	    if(item.getItemId()== R.id.logout) {
+	    	showFragment(SETTINGS, true);
+	    	return true;
 	    }
+	    
 	    if (item.getItemId()==R.id.challenges) {
 	        showFragment(HISTORY, true);
 	        return true;
