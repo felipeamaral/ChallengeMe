@@ -236,7 +236,7 @@ containing a value of this type.
         public static final int title_bar_logo=0x7f020038;
     }
     public static final class id {
-        public static final int challenges=0x7f04002b;
+        public static final int challenges=0x7f04002c;
         public static final int com_facebook_body_frame=0x7f040019;
         public static final int com_facebook_button_xout=0x7f04001b;
         public static final int com_facebook_login_activity_progress_bar=0x7f040009;
@@ -265,19 +265,20 @@ containing a value of this type.
         public static final int historyFragment=0x7f040006;
         public static final int icon=0x7f040021;
         public static final int large=0x7f040002;
-        public static final int login_button=0x7f04002a;
-        public static final int logout=0x7f04002c;
+        public static final int login_button=0x7f04002b;
+        public static final int logout=0x7f04002d;
         public static final int normal=0x7f040001;
         public static final int picker_fragment=0x7f040024;
         public static final int picker_subtitle=0x7f040016;
-        public static final int profile_name=0x7f040029;
+        public static final int profile_name=0x7f04002a;
         public static final int selectionFragment=0x7f040003;
         public static final int selection_list=0x7f040027;
         public static final int selection_profile_pic=0x7f040025;
         public static final int selection_user_name=0x7f040026;
+        public static final int sendRequestButton=0x7f040028;
         public static final int small=0x7f040000;
         public static final int splashFragment=0x7f040004;
-        public static final int splash_icon=0x7f040028;
+        public static final int splash_icon=0x7f040029;
         public static final int text1=0x7f040022;
         public static final int text2=0x7f040023;
         public static final int userSettingsFragment=0x7f040005;
@@ -317,7 +318,9 @@ containing a value of this type.
         public static final int action_sport_default=0x7f070028;
         public static final int app_id=0x7f07001b;
         public static final int app_name=0x7f07001a;
+        public static final int challenge=0x7f07002d;
         public static final int challenges=0x7f070025;
+        public static final int choose_sport_error=0x7f07002b;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -349,6 +352,8 @@ containing a value of this type.
         public static final int get_started=0x7f07001c;
         public static final int logout=0x7f070026;
         public static final int multiple_users_selected=0x7f070024;
+        public static final int ok=0x7f07002c;
+        public static final int send_request=0x7f07002e;
         public static final int settings=0x7f07001d;
         public static final int single_user_selected=0x7f070022;
         public static final int two_users_selected=0x7f070023;

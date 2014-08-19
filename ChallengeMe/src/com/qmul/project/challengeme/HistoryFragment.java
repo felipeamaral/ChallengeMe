@@ -10,6 +10,7 @@ public class HistoryFragment extends Fragment {
 	
 	private static final String TAG = "SelectionFragment";
 	
+	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, Bundle savedInstanceState) {
 	    super.onCreateView(inflater, container, savedInstanceState);

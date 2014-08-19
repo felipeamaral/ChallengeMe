@@ -28,9 +28,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/button_border"/>
-    
-
-    
-    
+     
+     <Button
+         android:id="@+id/sendRequestButton"
+         android:text="@string/challenge"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textStyle="bold"
+         android:layout_gravity="center_horizontal"
+         android:layout_marginBottom="30dp"
+         android:layout_marginTop="30dp" />
     
 </LinearLayout>

@@ -18,5 +18,9 @@
 	<string name="action_sport_default">Select one</string>
 	<string name="action_challenge">Which Challenge?</string>
 	<string name="action_challenge_default">Select one</string>
+	<string name="choose_sport_error">Choose a sport first!</string>
+	<string name="ok">Ok</string>
+	<string name="challenge">Challenge</string>
+	<string name="send_request">Send Request</string>
 
 </resources>

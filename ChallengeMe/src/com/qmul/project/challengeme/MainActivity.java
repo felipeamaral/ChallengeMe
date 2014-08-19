@@ -4,6 +4,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,7 @@ public class MainActivity extends FragmentActivity {
 	    //London
 	//olaaaaaa    
 	    setContentView(R.layout.activity_main);
-
+	    
 	    FragmentManager fm = getSupportFragmentManager();
 	    fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);
 	    fragments[SELECTION] = fm.findFragmentById(R.id.selectionFragment);

@@ -16,16 +16,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -34,19 +41,25 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 
 public class SelectionFragment extends Fragment {
 	private static final String TAG = "SelectionFragment";
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
 	private ListView listView;
+	private ListView sportListView;
 	private List<BaseListElement> listElements;
+	private Button sendChallengeButton;
+	private String requestId;
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, Bundle savedInstanceState) {
 	    super.onCreateView(inflater, container, savedInstanceState);
-	    
+	    	    
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
 	    
@@ -59,7 +72,10 @@ public class SelectionFragment extends Fragment {
 	    
 	 // Find the list view
 	    listView = (ListView) view.findViewById(R.id.selection_list);
-
+	   //sportListView = (ListView) view.findViewById(R.id.sport_list);
+	    
+	    
+	    
 	    // Set up the list view items, based on a list of
 	    // BaseListElement items
 	    listElements = new ArrayList<BaseListElement>();
@@ -90,8 +106,140 @@ public class SelectionFragment extends Fragment {
 	        makeMeRequest(session);
 	    }
 	    
+	    
+	    sendChallengeButton = (Button) view.findViewById(R.id.sendRequestButton);
+	    sendChallengeButton.setOnClickListener(new View.OnClickListener() {
+	    	@Override
+	    	public void onClick(View v){
+	    		sendRequestDialog();
+	    	}
+	    });
+	    
 	    return view;
 	}
+	
+	
+
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		
+		Uri intentUri = getActivity().getIntent().getData();
+		if(intentUri != null){
+			String requestIdParam = intentUri.getQueryParameter("request_id");
+			if(requestIdParam != null){
+				String array[] = requestIdParam.split(",");
+				requestId = array[0];
+				Log.i(TAG, "Request id: " + requestId);
+			}
+		}
+	}
+	
+	private void getRequestData(final String inRequestId){
+		
+		Request request = new Request(Session.getActiveSession(),
+							inRequestId, null, HttpMethod.GET, new Request.Callback() {
+			
+			@Override
+			public void onCompleted(Response response) {
+				GraphObject graphObject = response.getGraphObject();
+				FacebookRequestError error = response.getError();
+				boolean processError = false;
+				
+				String message = "Incoming request";
+				if(graphObject != null){
+					if(graphObject.getProperty("data") != null){
+						try{
+							JSONObject dataObject = 
+									new JSONObject((String) graphObject.getProperty("data"));
+									String sport = dataObject.getString("Sport");
+									String challenge = dataObject.getString("Challenge");
+									
+									JSONObject fromObject = (JSONObject) graphObject.getProperty("from");
+									String sender = fromObject.getString("name");
+									String title = sender+ " sent you a challenge";
+									message = title + "\n\n" +
+											"Sport: " + sport + "\n" + "Challenge: " + challenge;
+						} catch (JSONException e){
+							processError = true;
+							message = "Error getting request info";
+							
+						}
+					} else if (error != null){
+						processError = true;
+						message = "Error getting request info";
+					}
+				}
+				
+				Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+				if(!processError){
+					//deleteRequest(inRequestId);
+				}
+			}
+			
+		});
+		Request.executeBatchAsync(request);
+	}
+	
+	private void sendRequestDialog(){
+		Bundle params = new Bundle();
+		params.putString("message","You've been challenged!");
+		params.putString("data", "{\"Sport\":" +
+						 ((ChallengeMeApplication) getActivity()
+			   		             .getApplication())
+			   		             .getSelectedSports() +","+ "\"Challenge\":" + ((ChallengeMeApplication) getActivity()
+			   		             .getApplication())
+			   		             .getSelectedChallenges() +"}");
+		
+		WebDialog requestsDialog = (
+				new WebDialog.RequestsDialogBuilder(getActivity(),
+						Session.getActiveSession(),
+						params))
+						.setOnCompleteListener(new OnCompleteListener() {
+							@Override
+							public void onComplete(Bundle values, FacebookException error){
+								if(error != null){
+									if(error instanceof FacebookOperationCanceledException){
+										Toast.makeText(getActivity().getApplicationContext(),
+												"Request cancelled",
+												Toast.LENGTH_SHORT).show();
+									} else {
+										Toast.makeText(getActivity().getApplicationContext(),
+												"Network Error",
+												Toast.LENGTH_SHORT).show();
+									}
+								} else {
+									final String requestId = values.getString("request");
+									if(requestId != null){
+										Toast.makeText(getActivity().getApplicationContext(),
+												"Request sent",
+												Toast.LENGTH_SHORT).show();
+									} else {
+										Toast.makeText(getActivity().getApplicationContext(),
+												"Request Cancelled",
+												Toast.LENGTH_SHORT).show();
+									}
+								}
+							}
+						}).build();
+						requestsDialog.show();
+		
+		
+	}
+	
+	
+	public void deleteRequest(String inRequestId){
+		
+		Request request = new Request(Session.getActiveSession(), inRequestId, null, HttpMethod.DELETE, new Request.Callback(){
+			@Override
+			public void onCompleted(Response response){
+				Toast.makeText(getActivity().getApplicationContext(), "Request deleted", Toast.LENGTH_SHORT).show();
+			}
+		});
+		Request.executeBatchAsync(request);
+	}
+	
 	
 	private void makeMeRequest(final Session session) {
 	    // Make an API call to get user data and define a 
@@ -119,7 +267,12 @@ public class SelectionFragment extends Fragment {
 	} 
 	
 	private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-	    if (session != null && session.isOpened()) {
+	   
+		if(state.isOpened() && requestId != null){
+			getRequestData(requestId);
+		}
+		
+		if (session != null && session.isOpened()) {
 	        // Get the user's data.
 	        makeMeRequest(session);
 	    }
@@ -370,12 +523,9 @@ public class SelectionFragment extends Fragment {
 	
 	private class SportListElement extends BaseListElement{
 		
-		ListView listView;
-		View view;
-		
-		String[] sports = new String[]{"Football", "Tennis"};
-		
-		
+		DialogFragment sportListDialog = new SportListDialog();
+		private List<String> selectedSport;
+		private static final String SPORT_KEY = "sport";
 		
 		public SportListElement(int requestCode) {
 	        super(getActivity().getResources()
@@ -385,24 +535,125 @@ public class SelectionFragment extends Fragment {
 	              getActivity().getResources()
 	              .getString(R.string.action_sport_default),
 	              requestCode);
+	        
 	    }
 		
-	
+		private byte[] getByteArray(List<String> sports) {
+		    
+		    List<String> sportAsString = new ArrayList<String>(sports.size());
+
+		    for (String sport : sports) {
+		        sportAsString.add(sport.toString());
+		    }   
+		    try {
+		        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		        new ObjectOutputStream(outputStream).writeObject(sportAsString);
+		        return outputStream.toByteArray();
+		    } catch (IOException e) {
+		        Log.e(TAG, "Unable to serialize users.", e); 
+		    }   
+		    return null;
+		}
+		
+		
+		
+		
+		@Override
+		protected void onSaveInstanceState(Bundle bundle) {
+		    if (selectedSport != null) {
+		        bundle.putByteArray(SPORT_KEY,
+		                getByteArray(selectedSport));
+		    }   
+		} 
+		
+		private List<String> restoreByteArray(byte[] bytes) {
+		    try {
+		    	@SuppressWarnings("unchecked")
+				List<String> sportAsString =
+		    			(List<String>) (new ObjectInputStream
+                                (new ByteArrayInputStream(bytes)))
+                                .readObject();
+		    	if(sportAsString != null){
+		    		 List<String> sports = new ArrayList<String>
+		             (sportAsString.size());
+		             for (String sport : sportAsString) {
+		                 String sportString = sport;
+		                 sports.add(sportString);
+		             }   
+		             return sports;
+		    	}
+		    }  catch (ClassNotFoundException e) {
+		        Log.e(TAG, "Unable to deserialize users.", e); 
+		    } catch (IOException e) {
+		        Log.e(TAG, "Unable to deserialize users.", e); 
+		    }
+		    
+		    return null;
+		}
+		
+		
+		
+		@Override
+		protected boolean restoreState(Bundle savedState) {
+		    byte[] bytes = savedState.getByteArray(SPORT_KEY);
+		    if (bytes != null) {
+		        selectedSport = restoreByteArray(bytes);
+		        setSportText();
+		        return true;
+		    }   
+		    return false;
+		} 
+		
+		private void setSportText(){
+			String text = null;
+			if(selectedSport != null){
+				if(selectedSport.size() == 1){
+					text = String.format(getResources()
+		                    .getString(R.string.single_user_selected),
+		                    selectedSport.get(0));
+				}
+			}
+			
+			if(text == null){
+				text = getResources()
+				        .getString(R.string.action_sport_default);
+			}
+			
+			setText2(text);
+		}
+		
+		@Override
+		protected void onActivityResult(Intent data) {
+		    selectedSport = ((ChallengeMeApplication) getActivity()
+		             .getApplication())
+		             .getSelectedSports();
+		    setSportText();
+		    notifyDataChanged();
+		}
+		
 	    @Override
 	    protected View.OnClickListener getOnClickListener() {
-	        return new View.OnClickListener() {
-	       
-			@Override
+	    	
+	    	return new View.OnClickListener() {
+	        	
+	        	@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
-				}
+	        		selectedSport = ((ChallengeMeApplication) getActivity()
+		   		             .getApplication())
+		   		             .getSelectedSports();
+		   		    setSportText();
+		   		    notifyDataChanged();
+	        		sportListDialog.show(getFragmentManager(), "SportListDialog");      		
+	        	}
 	        };
 	    }
 	}
 	
 private class ChallengeListElement extends BaseListElement{
-		
+	DialogFragment challengeListDialog = new ChallengeListDialog();
+	private List<String> selectedChallenge;
+	private static final String CHALLENGE_KEY = "challenge";
+	
 		public ChallengeListElement(int requestCode) {
 	        super(getActivity().getResources()
 	              .getDrawable(R.drawable.add_photo),
@@ -413,12 +664,111 @@ private class ChallengeListElement extends BaseListElement{
 	              requestCode);
 	    }
 
+		private byte[] getByteArray(List<String> challenges) {
+		    
+		    List<String> challengeAsString = new ArrayList<String>(challenges.size());
+
+		    for (String challenge : challenges) {
+		    	challengeAsString.add(challenge.toString());
+		    }   
+		    try {
+		        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		        new ObjectOutputStream(outputStream).writeObject(challengeAsString);
+		        return outputStream.toByteArray();
+		    } catch (IOException e) {
+		        Log.e(TAG, "Unable to serialize users.", e); 
+		    }   
+		    return null;
+		}
+		
+		
+		
+		
+		@Override
+		protected void onSaveInstanceState(Bundle bundle) {
+		    if (selectedChallenge != null) {
+		        bundle.putByteArray(CHALLENGE_KEY,
+		                getByteArray(selectedChallenge));
+		    }   
+		} 
+		
+		private List<String> restoreByteArray(byte[] bytes) {
+		    try {
+		    	@SuppressWarnings("unchecked")
+				List<String> challengeAsString =
+		    			(List<String>) (new ObjectInputStream
+                                (new ByteArrayInputStream(bytes)))
+                                .readObject();
+		    	if(challengeAsString != null){
+		    		 List<String> challenges = new ArrayList<String>
+		             (challengeAsString.size());
+		             for (String challenge : challengeAsString) {
+		                 String challengeString = challenge;
+		                 challenges.add(challengeString);
+		             }   
+		             return challenges;
+		    	}
+		    }  catch (ClassNotFoundException e) {
+		        Log.e(TAG, "Unable to deserialize users.", e); 
+		    } catch (IOException e) {
+		        Log.e(TAG, "Unable to deserialize users.", e); 
+		    }
+		    
+		    return null;
+		}
+		
+		
+		
+		@Override
+		protected boolean restoreState(Bundle savedState) {
+		    byte[] bytes = savedState.getByteArray(CHALLENGE_KEY);
+		    if (bytes != null) {
+		        selectedChallenge = restoreByteArray(bytes);
+		        setChallengeText();
+		        return true;
+		    }   
+		    return false;
+		} 
+		
+		private void setChallengeText(){
+			String text = null;
+			if(selectedChallenge != null){
+				if(selectedChallenge.size() == 1){
+					text = String.format(getResources()
+		                    .getString(R.string.single_user_selected),
+		                    selectedChallenge.get(0));
+				}
+			}
+			
+			if(text == null){
+				text = getResources()
+				        .getString(R.string.action_challenge_default);
+			}
+			
+			setText2(text);
+		}
+		
+		@Override
+		protected void onActivityResult(Intent data) {
+		    selectedChallenge = ((ChallengeMeApplication) getActivity()
+		             .getApplication())
+		             .getSelectedChallenges();
+		    setChallengeText();
+		    notifyDataChanged();
+		}
+		
+
 	    @Override
 	    protected View.OnClickListener getOnClickListener() {
 	        return new View.OnClickListener() {
 	            @Override
 	            public void onClick(View view) {
-	                // Do nothing for now
+	            	selectedChallenge = ((ChallengeMeApplication) getActivity()
+		   		             .getApplication())
+		   		             .getSelectedChallenges();
+		   		    setChallengeText();
+		   		    notifyDataChanged();
+	            	challengeListDialog.show(getFragmentManager(), "ChallengeListDialog");
 	            }
 	        };
 	    }
