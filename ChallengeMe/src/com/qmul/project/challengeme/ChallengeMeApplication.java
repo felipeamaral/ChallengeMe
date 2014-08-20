@@ -10,7 +10,26 @@ public class ChallengeMeApplication extends Application {
 	private List<GraphUser> selectedUsers;
 	private List<String> selectedSports;
 	private List<String> selectedChallenges;
+	private List<String> selectedSportsRequested;
+	private List<String> selectedChallengesRequested;
 	
+	public List<String> getSelectedSportsRequested() {
+		return selectedSportsRequested;
+	}
+
+	public void setSelectedSportsRequested(List<String> selectedSportsRequested) {
+		this.selectedSportsRequested = selectedSportsRequested;
+	}
+
+	public List<String> getSelectedChallengesRequested() {
+		return selectedChallengesRequested;
+	}
+
+	public void setSelectedChallengesRequested(
+			List<String> selectedChallengesRequested) {
+		this.selectedChallengesRequested = selectedChallengesRequested;
+	}
+
 	public List<GraphUser> getSelectedUsers() {
 	    return selectedUsers;
 	}

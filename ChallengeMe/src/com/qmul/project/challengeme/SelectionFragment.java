@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -188,9 +189,9 @@ public class SelectionFragment extends Fragment {
 		params.putString("data", "{\"Sport\":" +
 						 ((ChallengeMeApplication) getActivity()
 			   		             .getApplication())
-			   		             .getSelectedSports() +","+ "\"Challenge\":" + ((ChallengeMeApplication) getActivity()
+			   		             .getSelectedSports().get(0) +","+ "\"Challenge\":" + ((ChallengeMeApplication) getActivity()
 			   		             .getApplication())
-			   		             .getSelectedChallenges() +"}");
+			   		             .getSelectedChallenges().get(0) +"}");
 		
 		WebDialog requestsDialog = (
 				new WebDialog.RequestsDialogBuilder(getActivity(),
@@ -224,7 +225,15 @@ public class SelectionFragment extends Fragment {
 							}
 						}).build();
 						requestsDialog.show();
-		
+						//saves the challenge in the history
+//						String[] sport = ((ChallengeMeApplication) getActivity()
+//					             .getApplication())
+//					             .getSelectedSports().toArray(new String[0]);
+//					String[] challenge = ((ChallengeMeApplication) getActivity()
+//					             .getApplication())
+//					             .getSelectedChallenges().toArray(new String[0]);
+//					Drawable myIcon = getResources().getDrawable( R.drawable.add_friends );
+//					ChallengeHistoryElement newchallenge = new ChallengeHistoryElement(myIcon, sport[0] , challenge[0], 1);
 		
 	}
 	
