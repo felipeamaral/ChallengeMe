@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -54,8 +53,7 @@ public class SelectionFragment extends Fragment {
 	private List<BaseListElement> listElements;
 	private Button sendChallengeButton;
 	private String requestId;
-	
-	
+	private int logCounter =0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +61,8 @@ public class SelectionFragment extends Fragment {
 	    	    
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
-	    
+	    saveChallenge();
+	 
 	 // Find the user's profile picture custom view
 	    profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
 	    profilePictureView.setCropped(true);
@@ -113,12 +112,32 @@ public class SelectionFragment extends Fragment {
 	    	@Override
 	    	public void onClick(View v){
 	    		sendRequestDialog();
+	    		
 	    	}
 	    });
 	    
 	    return view;
 	}
 	
+	public void saveChallenge(){
+		MySQLiteHelper db = new MySQLiteHelper(getActivity());
+		if (logCounter==0)
+		{
+			db.addChallenge(new ChallengeLog("", "", "No Challenges in history", "", logCounter));
+			logCounter++;
+		}
+		else
+		{
+		String sport = ((ChallengeMeApplication) getActivity()
+        .getApplication())
+        .getSelectedSports().get(0);
+		String challenge = ((ChallengeMeApplication) getActivity()
+        .getApplication())
+        .getSelectedChallenges().get(0);
+	    db.addChallenge(new ChallengeLog("Felipe", "Vini", sport, challenge, logCounter));
+	    logCounter++;
+		}
+	}
 	
 
 	
@@ -225,15 +244,10 @@ public class SelectionFragment extends Fragment {
 							}
 						}).build();
 						requestsDialog.show();
-						//saves the challenge in the history
-//						String[] sport = ((ChallengeMeApplication) getActivity()
-//					             .getApplication())
-//					             .getSelectedSports().toArray(new String[0]);
-//					String[] challenge = ((ChallengeMeApplication) getActivity()
-//					             .getApplication())
-//					             .getSelectedChallenges().toArray(new String[0]);
-//					Drawable myIcon = getResources().getDrawable( R.drawable.add_friends );
-//					ChallengeHistoryElement newchallenge = new ChallengeHistoryElement(myIcon, sport[0] , challenge[0], 1);
+						saveChallenge();
+						
+						
+
 		
 	}
 	
@@ -782,6 +796,7 @@ private class ChallengeListElement extends BaseListElement{
 	        };
 	    }
 	}
+
 	
 
 	

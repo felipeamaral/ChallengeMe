@@ -3,9 +3,12 @@ package com.qmul.project.challengeme;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +17,33 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphObject;
+import com.facebook.widget.ProfilePictureView;
 
 public class HistoryFragment extends Fragment {
 	
 	private static final String TAG = "SelectionFragment";
 	private ListView listView;
 	private List<ChallengeHistoryElement> listElements;
+	DialogFragment responseDialog = new ResponseChallengeDialog();
+	ChallengeLog challengeLog = new ChallengeLog();
+	int idChallenge = 0;
+	private ProfilePictureView profilePictureView;
+	//MySQLiteHelper db = new MySQLiteHelper(getActivity().getApplicationContext());
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, Bundle savedInstanceState) {
 	    super.onCreateView(inflater, container, savedInstanceState);
 	    View view = inflater.inflate(R.layout.history, container, false);
+	    
 	 // Find the list view
 	    listView = (ListView) view.findViewById(R.id.selection_list);
 
@@ -33,7 +51,14 @@ public class HistoryFragment extends Fragment {
 	    // BaseListElement items
 	    listElements = new ArrayList<ChallengeHistoryElement>();
 	    // Add an item for the friend picker
-	    listElements.add(new ChallengeElement(0));
+	    MySQLiteHelper db = new MySQLiteHelper(getActivity());
+	    ChallengeLog ch = new ChallengeLog();
+	    
+	    
+	    ch = db.getChallenge(1);
+	    String sport=ch.getSport();
+	    String challenge=ch.getChallenge();
+	    listElements.add(new ChallengeElement(0, sport, challenge));
 	    // Set the list view adapter
 	    listView.setAdapter(new ActionListAdapter(getActivity(), 
 	                        R.id.selection_list, listElements));
@@ -67,6 +92,7 @@ public class HistoryFragment extends Fragment {
 	        ChallengeHistoryElement listElement = listElements.get(position);
 	        if (listElement != null) {
 	            view.setOnClickListener(listElement.getOnClickListener());
+	            
 	            ImageView icon = (ImageView) view.findViewById(R.id.icon);
 	            TextView text1 = (TextView) view.findViewById(R.id.text1);
 	            TextView text2 = (TextView) view.findViewById(R.id.text2);
@@ -82,14 +108,13 @@ public class HistoryFragment extends Fragment {
 	        }
 	        return view;
 	    }
-
 	}
 	private class ChallengeElement extends ChallengeHistoryElement {
-
-	    public ChallengeElement(int requestCode) {
-	        super(getActivity().getResources().getDrawable(R.drawable.add_friends),
-	              getActivity().getResources().getString(R.string.settings),
-	              getActivity().getResources().getString(R.string.settings),
+		
+	    public ChallengeElement(int requestCode, String sport, String challenge) {    	
+	    	super(getActivity().getResources().getDrawable(R.drawable.add_friends),
+	    			sport,
+	              challenge,
 	              requestCode);
 	    }
 
@@ -98,7 +123,7 @@ public class HistoryFragment extends Fragment {
 	        return new View.OnClickListener() {
 	            @Override
 	            public void onClick(View view) {
-	                // Do nothing for now
+	            	responseDialog.show(getFragmentManager(), "ResponseChallengeDialog");
 	            }
 	        };
 	    }
