@@ -3,13 +3,12 @@ package com.qmul.project.challengeme;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphObject;
 import com.facebook.widget.ProfilePictureView;
 
 public class HistoryFragment extends Fragment {
@@ -54,14 +46,36 @@ public class HistoryFragment extends Fragment {
 	    MySQLiteHelper db = new MySQLiteHelper(getActivity());
 	    ChallengeLog ch = new ChallengeLog();
 	    
+	    int numberOfChallenges = db.countRow();
 	    
-	    ch = db.getChallenge(1);
-	    String sport=ch.getSport();
-	    String challenge=ch.getChallenge();
-	    listElements.add(new ChallengeElement(0, sport, challenge));
+	    if(numberOfChallenges == 0){
+	    	listElements.add(new ChallengeElement(0, "No Challenges in history", ""));
+		    
+	    } else {
+	    	List<ChallengeLog> list = db.getAllChallenges();
+	    	listElements.clear();
+	    	for(int i = 0; i <10; i++){
+    			System.out.println("*");
+    		}
+	    	for(int j = 0; j < list.size(); j++){
+	    		
+	    		ChallengeLog aux = list.get(j);
+	    		String sport = aux.getSport();
+	    		String challenge = aux.getChallenge();
+	    		int id = aux.getChallengeId();
+	    		
+	    		System.out.println(id +" "+ sport +" "+challenge );
+	    		
+	    		listElements.add(new ChallengeElement(j, sport, challenge));
+	    		
+
+	    	}
+	
+	    }
+	    
 	    // Set the list view adapter
 	    listView.setAdapter(new ActionListAdapter(getActivity(), 
-	                        R.id.selection_list, listElements));
+	                        R.id.selection_list, listElements));    
 	    return view;
 	}
 	

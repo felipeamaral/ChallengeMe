@@ -61,7 +61,6 @@ public class SelectionFragment extends Fragment {
 	    	    
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
-	    saveChallenge();
 	 
 	 // Find the user's profile picture custom view
 	    profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
@@ -121,13 +120,15 @@ public class SelectionFragment extends Fragment {
 	
 	public void saveChallenge(){
 		MySQLiteHelper db = new MySQLiteHelper(getActivity());
-		if (logCounter==0)
+		
+		/*
+		if (numberOfChallenges==0)
 		{
 			db.addChallenge(new ChallengeLog("", "", "No Challenges in history", "", logCounter));
 			logCounter++;
 		}
 		else
-		{
+		{*/
 		String sport = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedSports().get(0);
@@ -136,7 +137,9 @@ public class SelectionFragment extends Fragment {
         .getSelectedChallenges().get(0);
 	    db.addChallenge(new ChallengeLog("Felipe", "Vini", sport, challenge, logCounter));
 	    logCounter++;
-		}
+		//}
+		
+		
 	}
 	
 
@@ -235,6 +238,7 @@ public class SelectionFragment extends Fragment {
 										Toast.makeText(getActivity().getApplicationContext(),
 												"Request sent",
 												Toast.LENGTH_SHORT).show();
+										saveChallenge();
 									} else {
 										Toast.makeText(getActivity().getApplicationContext(),
 												"Request Cancelled",
@@ -244,7 +248,7 @@ public class SelectionFragment extends Fragment {
 							}
 						}).build();
 						requestsDialog.show();
-						saveChallenge();
+						
 						
 						
 

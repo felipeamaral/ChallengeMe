@@ -148,12 +148,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	}
 	
 	public int countRow(){
+		SQLiteDatabase db = this.getReadableDatabase();
 		
 		String query = "SELECT COUNT(*)FROM " + TABLE_CHALLENGES;
+		Cursor cursor = db.rawQuery(query, null);
 		
+		cursor.moveToFirst();
 		
+		int i = Integer.parseInt(cursor.getString(0));
 		
-		return 0;
+		return i;
+		
 	}
 	
 	public void deleteChallenge(ChallengeLog challengeLog){

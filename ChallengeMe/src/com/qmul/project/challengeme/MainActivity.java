@@ -33,8 +33,6 @@ public class MainActivity extends FragmentActivity {
 	    uiHelper.onCreate(savedInstanceState);
 	    
 	    setContentView(R.layout.activity_main);
-	    
-	    
 
 	    FragmentManager fm = getSupportFragmentManager();
 	    fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);
@@ -72,23 +70,17 @@ public class MainActivity extends FragmentActivity {
 	        if (menu.size() == 0) {
 	        	MenuInflater inflater = getMenuInflater();
 	            inflater.inflate(R.menu.menu_actions, menu);
-	            //settings = menu.add(R.string.settings);
 	        }
 	        return true;
 	    } else {
 	        menu.clear();
-	        settings = null;
+	        
 	    }
 	    return false;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    /*
-		if (item.equals(settings)) {
-	        showFragment(SETTINGS, true);
-	        return true;
-	    }*/
 	    
 	    if(item.getItemId()== R.id.logout) {
 	    	showFragment(SETTINGS, true);
@@ -96,6 +88,7 @@ public class MainActivity extends FragmentActivity {
 	    }
 	    
 	    if (item.getItemId()==R.id.challenges) {
+	    	fragments[HISTORY].onDetach();
 	        showFragment(HISTORY, true);
 	        return true;
 	    } 
