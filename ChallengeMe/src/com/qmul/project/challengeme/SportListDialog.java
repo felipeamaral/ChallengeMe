@@ -17,6 +17,7 @@ public class SportListDialog extends DialogFragment {
 	private List<String> selectedSport;
 	private List<String> aux;
 	private List<GraphUser> selectedFriend;
+	public boolean isSelected = false;
 	
 	
 	@Override
@@ -26,8 +27,6 @@ public class SportListDialog extends DialogFragment {
 	             .getSelectedUsers();
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		
-
 		
 		builder.setTitle(R.string.action_sport)
 					.setItems(sports, new DialogInterface.OnClickListener(){
@@ -39,6 +38,23 @@ public class SportListDialog extends DialogFragment {
 							((ChallengeMeApplication) getActivity()
 						             .getApplication())
 						             .setSelectedSports(selectedSport);
+							
+							aux = ((ChallengeMeApplication) getActivity()
+						             .getApplication())
+						             .getSelectedSports();
+							
+							if(!aux.isEmpty()){
+
+								isSelected = true;
+								
+							}
+							
+							 
+							
+							((ChallengeMeApplication) getActivity()
+						             .getApplication())
+						             .setIsSportSelected(isSelected);
+							
 							
 						}
 		});

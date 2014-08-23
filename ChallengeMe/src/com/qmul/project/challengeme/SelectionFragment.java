@@ -18,8 +18,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +53,9 @@ public class SelectionFragment extends Fragment {
 	private List<BaseListElement> listElements;
 	private Button sendChallengeButton;
 	private String requestId;
-	private int logCounter =0;
+	public boolean isSelected;
+	DialogFragment challengeErro = new ChallengeButtonErrorDialog();
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 	        ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +63,9 @@ public class SelectionFragment extends Fragment {
 	    	    
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
+	    
+	    List<String> name = new ArrayList<String>();
+	    
 	 
 	 // Find the user's profile picture custom view
 	    profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
@@ -70,6 +73,14 @@ public class SelectionFragment extends Fragment {
 
 	    // Find the user's name view
 	    userNameView = (TextView) view.findViewById(R.id.selection_user_name);
+	    
+	    name.add(userNameView.getText().toString());
+	    
+	    ((ChallengeMeApplication) getActivity()
+	            .getApplication())
+	            .setFromUser(name);
+	    
+	    
 	    
 	 // Find the list view
 	    listView = (ListView) view.findViewById(R.id.selection_list);
@@ -82,7 +93,7 @@ public class SelectionFragment extends Fragment {
 	    listElements = new ArrayList<BaseListElement>();
 	    
 	    // Add an item for the friend picker
-	    listElements.add(new PeopleListElement(0));
+	   // listElements.add(new PeopleListElement(0));
 	    // Add an item for the friend picker
 	    listElements.add(new SportListElement(0));
 	    // Add an item for the friend picker
@@ -112,7 +123,17 @@ public class SelectionFragment extends Fragment {
 	    sendChallengeButton.setOnClickListener(new View.OnClickListener() {
 	    	@Override
 	    	public void onClick(View v){
-	    		sendRequestDialog();
+	    		
+	    		
+	    		isSelected = ((ChallengeMeApplication) getActivity()
+	   	             .getApplication())
+	   	             .isChallengeSelected();
+	    		
+	    		if(isSelected == true){
+	    			sendRequestDialog();
+		    	} else {
+		    		challengeErro.show(getFragmentManager(), "ChallengeButtonErrorDialog");
+		    	}
 	    		
 	    	}
 	    });
@@ -122,30 +143,23 @@ public class SelectionFragment extends Fragment {
 	
 	public void saveChallenge(){
 		MySQLiteHelper db = new MySQLiteHelper(getActivity());
-		
-		/*
-		if (numberOfChallenges==0)
-		{
-			db.addChallenge(new ChallengeLog("", "", "No Challenges in history", "", logCounter));
-			logCounter++;
-		}
-		else
-		{*/
+
 		String sport = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedSports().get(0);
 		String challenge = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedChallenges().get(0);
-	    db.addChallenge(new ChallengeLog("Felipe", "Vini", sport, challenge, logCounter));
-	    logCounter++;
-		//}
+		String fromUser = ((ChallengeMeApplication) getActivity()
+	            .getApplication())
+	            .getFromUser().get(0);
 		
+		
+		db.addChallenge(new ChallengeLog(fromUser, "Vini", sport, challenge, null, null));
 		
 	}
 	
 
-	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -402,6 +416,8 @@ public class SelectionFragment extends Fragment {
 	            ImageView icon = (ImageView) view.findViewById(R.id.icon);
 	            TextView text1 = (TextView) view.findViewById(R.id.text1);
 	            TextView text2 = (TextView) view.findViewById(R.id.text2);
+	            TextView text3 = (TextView) view.findViewById(R.id.text3);
+	            
 	            if (icon != null) {
 	                icon.setImageDrawable(listElement.getIcon());
 	            }
@@ -410,6 +426,9 @@ public class SelectionFragment extends Fragment {
 	            }
 	            if (text2 != null) {
 	                text2.setText(listElement.getText2());
+	            }
+	            if(text3 != null){
+	            	text3.setText(listElement.getText3());
 	            }
 	        }
 	        return view;
@@ -516,7 +535,7 @@ public class SelectionFragment extends Fragment {
 	    public PeopleListElement(int requestCode) {
 	        super(getActivity().getResources().getDrawable(R.drawable.add_friends),
 	              getActivity().getResources().getString(R.string.action_people),
-	              getActivity().getResources().getString(R.string.action_people_default),
+	              getActivity().getResources().getString(R.string.action_people_default),"",
 	              requestCode);
 	    }
 	    
@@ -565,6 +584,7 @@ public class SelectionFragment extends Fragment {
 	              .getString(R.string.action_sport),
 	              getActivity().getResources()
 	              .getString(R.string.action_sport_default),
+	              "",
 	              requestCode);
 	        
 	    }
@@ -691,7 +711,7 @@ private class ChallengeListElement extends BaseListElement{
 	              getActivity().getResources()
 	              .getString(R.string.action_challenge),
 	              getActivity().getResources()
-	              .getString(R.string.action_challenge_default),
+	              .getString(R.string.action_challenge_default), " ",
 	              requestCode);
 	    }
 

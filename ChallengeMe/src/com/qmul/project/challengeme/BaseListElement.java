@@ -11,6 +11,7 @@ public abstract class BaseListElement {
 	private Drawable icon;
 	private String text1;
 	private String text2;
+	private String text3;
 	private int requestCode;
 	
 	public String getText1() {
@@ -22,6 +23,7 @@ public abstract class BaseListElement {
 		    adapter.notifyDataSetChanged();
 		}
 	}
+	
 	public String getText2() {
 		return text2;
 	}
@@ -31,18 +33,32 @@ public abstract class BaseListElement {
 		    adapter.notifyDataSetChanged();
 		}
 	}
+	
+	public String getText3() {
+		return text3;
+	}
+	public void setText3(String text3) {
+		this.text3 = text3;
+		if (adapter != null) {
+		    adapter.notifyDataSetChanged();
+		}
+	}
+	
+	
+	
 	public Drawable getIcon() {
 		return icon;
 	}
 	public int getRequestCode() {
 		return requestCode;
 	}
-	public BaseListElement(Drawable icon, String text1, String text2,
+	public BaseListElement(Drawable icon, String text1, String text2, String text3,
 			int requestCode) {
 		super();
 		this.icon = icon;
 		this.text1 = text1;
 		this.text2 = text2;
+		this.text3 = text3;
 		this.requestCode = requestCode;
 	}
 

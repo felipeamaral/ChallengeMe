@@ -12,7 +12,47 @@ public class ChallengeMeApplication extends Application {
 	private List<String> selectedChallenges;
 	private List<String> selectedSportsRequested;
 	private List<String> selectedChallengesRequested;
+	private List<String> fromUser;
+	private List<String> toUser;
+	private boolean isSportSelected;
+	private boolean isChallengeSelected;
 	
+	
+	
+	
+
+	public boolean isSportSelected() {
+		return isSportSelected;
+	}
+
+	public void setIsSportSelected(boolean isSportSelected) {
+		this.isSportSelected = isSportSelected;
+	}
+
+	public boolean isChallengeSelected() {
+		return isChallengeSelected;
+	}
+
+	public void setIsChallengeSelected(boolean isChallengeSelected) {
+		this.isChallengeSelected = isChallengeSelected;
+	}
+
+	public List<String> getFromUser() {
+		return fromUser;
+	}
+
+	public void setFromUser(List<String> fromUser) {
+		this.fromUser = fromUser;
+	}
+
+	public List<String> getToUser() {
+		return toUser;
+	}
+
+	public void setToUser(List<String> toUser) {
+		this.toUser = toUser;
+	}
+
 	public List<String> getSelectedSportsRequested() {
 		return selectedSportsRequested;
 	}

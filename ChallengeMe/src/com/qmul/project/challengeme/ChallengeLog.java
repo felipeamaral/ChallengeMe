@@ -7,27 +7,35 @@ public class ChallengeLog {
 	private String toUser;
 	private String sport;
 	private String challenge;
-	private int logCounter;
+	private String winner;
+	private String score;
 	
 	public ChallengeLog(){}
 	
-	public ChallengeLog(String fromUser, String toUser, String sport, String challenge, int logCounter){
+	public ChallengeLog(String fromUser, String toUser, String sport, String challenge, String winner, String score){
 		super();
 		this.fromUser = fromUser;
 		this.toUser = toUser;
 		this.sport = sport;
 		this.challenge = challenge;
-		this.logCounter = logCounter;
+		this.winner = winner;
+		this.score = score;
 	}
 	
-	
-	
-	public int getLogCounter() {
-		return logCounter;
+	public String getWinner() {
+		return winner;
 	}
 
-	public void setLogCounter(int logCounter) {
-		this.logCounter = logCounter;
+	public void setWinner(String winner) {
+		this.winner = winner;
+	}
+
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
 	}
 
 	public int getChallengeId() {
@@ -66,7 +74,7 @@ public class ChallengeLog {
 
 	@Override
 	public String toString(){
-		return "Challenge [id = " + challengeId +", from: " + fromUser +", toUser: " + toUser +", Sport: " + sport +", Challenge: "+ challenge + "logCounter = "+ logCounter+"]";
+		return "Challenge [id = " + challengeId +", from: " + fromUser +", toUser: " + toUser +", Sport: " + sport +", Challenge: "+ challenge + " winner = "+ winner +", score "+score +"]";
 	}
 	
 

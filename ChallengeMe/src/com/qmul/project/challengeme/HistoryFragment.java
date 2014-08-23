@@ -28,7 +28,6 @@ public class HistoryFragment extends Fragment {
 	ChallengeLog challengeLog = new ChallengeLog();
 	int idChallenge = 0;
 	private ProfilePictureView profilePictureView;
-	//MySQLiteHelper db = new MySQLiteHelper(getActivity().getApplicationContext());
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
@@ -49,7 +48,7 @@ public class HistoryFragment extends Fragment {
 	    int numberOfChallenges = db.countRow();
 	    
 	    if(numberOfChallenges == 0){
-	    	listElements.add(new ChallengeElement(0, "No Challenges in history", ""));
+	    	listElements.add(new ChallengeElement(0, null ,"No Challenges in history",null, null, null, null));
 		    
 	    } else {
 	    	List<ChallengeLog> list = db.getAllChallenges();
@@ -62,11 +61,23 @@ public class HistoryFragment extends Fragment {
 	    		ChallengeLog aux = list.get(j);
 	    		String sport = aux.getSport();
 	    		String challenge = aux.getChallenge();
+	    		String fromUser = aux.getFromUser();
+	    		String toUser = aux.getToUser();
+	    		String winner = aux.getWinner();
+	    		String score = aux.getScore();
+	    		
+	    		if(winner == null && score == null){
+	    			winner = "Pending...";
+	    			score = "";		
+	    		} else if(winner != null && score != null) {
+	    			winner = "Winner: " + aux.getWinner().concat(" -- > ");
+	    		}
+	    		
 	    		int id = aux.getChallengeId();
 	    		
 	    		System.out.println(id +" "+ sport +" "+challenge );
 	    		
-	    		listElements.add(new ChallengeElement(j, sport, challenge));
+	    		listElements.add(new ChallengeElement(j, fromUser, toUser,sport, challenge, winner, score));
 	    		
 
 	    	}
@@ -110,6 +121,7 @@ public class HistoryFragment extends Fragment {
 	            ImageView icon = (ImageView) view.findViewById(R.id.icon);
 	            TextView text1 = (TextView) view.findViewById(R.id.text1);
 	            TextView text2 = (TextView) view.findViewById(R.id.text2);
+	            TextView text3 = (TextView) view.findViewById(R.id.text3);
 	            if (icon != null) {
 	                icon.setImageDrawable(listElement.getIcon());
 	            }
@@ -119,16 +131,20 @@ public class HistoryFragment extends Fragment {
 	            if (text2 != null) {
 	                text2.setText(listElement.getText2());
 	            }
+	            if (text3 != null){
+	            	text3.setText(listElement.getText3());
+	            }
 	        }
 	        return view;
 	    }
 	}
 	private class ChallengeElement extends ChallengeHistoryElement {
 		
-	    public ChallengeElement(int requestCode, String sport, String challenge) {    	
+	    public ChallengeElement(int requestCode, String fromUser, String toUser,String sport, String challenge, String winner, String score) {    	
 	    	super(getActivity().getResources().getDrawable(R.drawable.add_friends),
-	    			sport,
-	              challenge,
+	    			fromUser.concat(" vs ") + toUser,
+	              sport.concat(" --> ") + challenge,
+	              winner + score,
 	              requestCode);
 	    }
 
@@ -137,7 +153,11 @@ public class HistoryFragment extends Fragment {
 	        return new View.OnClickListener() {
 	            @Override
 	            public void onClick(View view) {
-	            	responseDialog.show(getFragmentManager(), "ResponseChallengeDialog");
+	            	MySQLiteHelper db = new MySQLiteHelper(getActivity());
+	            	int i = db.countRow();
+	            	if(i != 0){
+	            		responseDialog.show(getFragmentManager(), "ResponseChallengeDialog");	            		
+	            	}
 	            }
 	        };
 	    }

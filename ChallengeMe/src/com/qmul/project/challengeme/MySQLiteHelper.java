@@ -21,10 +21,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String KEY_TOUSER = "toUser";
 	private static final String KEY_SPORT = "sport";
 	private static final String KEY_CHALLENGE = "challenge";
-	private static final String KEY_LOGCOUNTER = "logcounter";
+	private static final String KEY_WINNER = "winner";
+	private static final String KEY_SCORE = "score";
 	
 	
-	private static final String[] COLUMNS = {KEY_ID, KEY_FROMUSER, KEY_TOUSER, KEY_SPORT, KEY_CHALLENGE, KEY_LOGCOUNTER };
+	
+	private static final String[] COLUMNS = {KEY_ID, KEY_FROMUSER, KEY_TOUSER, KEY_SPORT, KEY_CHALLENGE, KEY_WINNER,KEY_SCORE };
 	
 	public MySQLiteHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +42,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				"toUser TEXT, " +
 				"sport TEXT, "+
 				"challenge TEXT, " +
-				"logcounter INTEGER)";
+				"winner TEXT, " +
+				"score TEXT)";
 		db.execSQL(CREATE_CHALLENGE_TABLE);
 	}
 
@@ -61,8 +64,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put(KEY_TOUSER, challengeLog.getToUser());
 		values.put(KEY_SPORT, challengeLog.getSport());
 		values.put(KEY_CHALLENGE, challengeLog.getChallenge());
-		values.put(KEY_CHALLENGE, challengeLog.getChallenge());
-		values.put(KEY_LOGCOUNTER, challengeLog.getLogCounter());
+		values.put(KEY_WINNER, challengeLog.getWinner());
+		values.put(KEY_SCORE, challengeLog.getScore());
 		
 		
 		db.insert(TABLE_CHALLENGES, null, values);
@@ -94,7 +97,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		challengeLog.setToUser(cursor.getString(2));
 		challengeLog.setSport(cursor.getString(3));
 		challengeLog.setChallenge(cursor.getString(4));
-		challengeLog.setLogCounter(Integer.parseInt(cursor.getString(5)));
+		challengeLog.setWinner(cursor.getString(5));
+		challengeLog.setScore(cursor.getString(6));
 		Log.d("getChallenge("+id+")", challengeLog.toString());
 		
 		return challengeLog;
@@ -118,7 +122,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 				challengeLog.setToUser(cursor.getString(2));
 				challengeLog.setSport(cursor.getString(3));
 				challengeLog.setChallenge(cursor.getString(4));
-				challengeLog.setLogCounter(Integer.parseInt(cursor.getString(5)));
+				challengeLog.setWinner(cursor.getString(5));
+				challengeLog.setScore(cursor.getString(6));
 				
 				challenges.add(challengeLog);
 				
@@ -138,6 +143,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put("toUser", challengeLog.getToUser());
 		values.put("sport", challengeLog.getSport());
 		values.put("challenge", challengeLog.getChallenge());
+		values.put("winner", challengeLog.getWinner());
+		values.put("score", challengeLog.getChallenge());
 		
 		int i = db.update(TABLE_CHALLENGES,
 				values, KEY_ID+" = ?",
