@@ -140,12 +140,25 @@ public class HistoryFragment extends Fragment {
 	}
 	private class ChallengeElement extends ChallengeHistoryElement {
 		
-	    public ChallengeElement(int requestCode, String fromUser, String toUser,String sport, String challenge, String winner, String score) {    	
+		int idChallenge;
+		
+	    public int getIdChallenge() {
+			return idChallenge;
+		}
+
+		public void setIdChallenge(int idChallenge) {
+			this.idChallenge = idChallenge;
+		}
+
+		public ChallengeElement(int requestCode, String fromUser, String toUser,String sport, String challenge, String winner, String score) {    	
 	    	super(getActivity().getResources().getDrawable(R.drawable.add_friends),
 	    			fromUser.concat(" vs ") + toUser,
 	              sport.concat(" --> ") + challenge,
 	              winner + score,
 	              requestCode);
+	    	
+	    	setIdChallenge(requestCode);
+	    	
 	    }
 
 	    @Override
@@ -156,6 +169,7 @@ public class HistoryFragment extends Fragment {
 	            	MySQLiteHelper db = new MySQLiteHelper(getActivity());
 	            	int i = db.countRow();
 	            	if(i != 0){
+	            		
 	            		responseDialog.show(getFragmentManager(), "ResponseChallengeDialog");	            		
 	            	}
 	            }

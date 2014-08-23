@@ -65,11 +65,7 @@ public class SelectionFragment extends Fragment {
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
 	    
-	    
-	    
 	 
-	    
-	    
 	 // Find the user's profile picture custom view
 	    profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
 	    profilePictureView.setCropped(true);
@@ -78,16 +74,9 @@ public class SelectionFragment extends Fragment {
 	    userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 	    
 	    
-	    
-	    
-	    
-	    
-	    
-	 // Find the list view
+	    // Find the list view
 	    listView = (ListView) view.findViewById(R.id.selection_list);
 	   //sportListView = (ListView) view.findViewById(R.id.sport_list);
-	    
-	    
 	    
 	    // Set up the list view items, based on a list of
 	    // BaseListElement items
@@ -148,6 +137,7 @@ public class SelectionFragment extends Fragment {
 		String sport = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedSports().get(0);
+		
 		String challenge = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedChallenges().get(0);
@@ -187,6 +177,10 @@ public class SelectionFragment extends Fragment {
 				GraphObject graphObject = response.getGraphObject();
 				FacebookRequestError error = response.getError();
 				boolean processError = false;
+				List<String> fromUser = new ArrayList<String>();
+				List<String> toUser = new ArrayList<String>();
+				List<String> sportList = new ArrayList<String>();
+				List<String> challengeList = new ArrayList<String>();
 				
 				String message = "Incoming request";
 				if(graphObject != null){
@@ -200,8 +194,36 @@ public class SelectionFragment extends Fragment {
 									JSONObject fromObject = (JSONObject) graphObject.getProperty("from");
 									String sender = fromObject.getString("name");
 									String title = sender+ " sent you a challenge";
-									message = title + "\n\n" +
-											"Sport: " + sport + "\n" + "Challenge: " + challenge;
+									
+									String receiver = ((ChallengeMeApplication) getActivity()
+								            .getApplication())
+								            .getFromUser().get(0);
+									
+									toUser.add(receiver);
+									fromUser.add(sender);
+									sportList.add(sport);
+									challengeList.add(challenge);
+									
+									((ChallengeMeApplication) getActivity()
+								            .getApplication())
+								            .setSelectedSports(sportList);
+									
+									((ChallengeMeApplication) getActivity()
+								            .getApplication())
+								            .setSelectedChallenges(challengeList);
+									
+									((ChallengeMeApplication) getActivity()
+								            .getApplication())
+								            .setFromUser(fromUser);
+									
+									((ChallengeMeApplication) getActivity()
+								            .getApplication())
+								            .setToUser(toUser);
+								    
+									saveChallenge();
+									Intent intent = new Intent(getActivity(),MainActivity.class);
+									getActivity().startActivity(intent);
+									
 						} catch (JSONException e){
 							processError = true;
 							message = "Error getting request info";
@@ -215,7 +237,7 @@ public class SelectionFragment extends Fragment {
 				
 				Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
 				if(!processError){
-					//deleteRequest(inRequestId);
+					deleteRequest(inRequestId);
 				}
 			}
 			
@@ -252,6 +274,7 @@ public class SelectionFragment extends Fragment {
 									}
 								} else {
 									final String requestId = values.getString("request");
+									System.out.println(requestId);
 									if(requestId != null){
 										Toast.makeText(getActivity().getApplicationContext(),
 												"Request sent",

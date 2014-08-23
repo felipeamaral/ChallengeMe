@@ -16,10 +16,21 @@ public class ChallengeMeApplication extends Application {
 	private List<String> toUser;
 	private boolean isSportSelected;
 	private boolean isChallengeSelected;
+	private int historySelected;
 	
 	
 	
 	
+	
+	
+
+	public int getHistorySelected() {
+		return historySelected;
+	}
+
+	public void setHistorySelected(int historySelected) {
+		this.historySelected = historySelected;
+	}
 
 	public boolean isSportSelected() {
 		return isSportSelected;

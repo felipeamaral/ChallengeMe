@@ -144,7 +144,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		values.put("sport", challengeLog.getSport());
 		values.put("challenge", challengeLog.getChallenge());
 		values.put("winner", challengeLog.getWinner());
-		values.put("score", challengeLog.getChallenge());
+		values.put("score", challengeLog.getScore());
 		
 		int i = db.update(TABLE_CHALLENGES,
 				values, KEY_ID+" = ?",
