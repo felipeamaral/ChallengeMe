@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,9 +65,11 @@ public class SelectionFragment extends Fragment {
 	    View view = inflater.inflate(R.layout.selection, 
 	            container, false);
 	    
-	    List<String> name = new ArrayList<String>();
+	    
 	    
 	 
+	    
+	    
 	 // Find the user's profile picture custom view
 	    profilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
 	    profilePictureView.setCropped(true);
@@ -74,11 +77,9 @@ public class SelectionFragment extends Fragment {
 	    // Find the user's name view
 	    userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 	    
-	    name.add(userNameView.getText().toString());
 	    
-	    ((ChallengeMeApplication) getActivity()
-	            .getApplication())
-	            .setFromUser(name);
+	    
+	    
 	    
 	    
 	    
@@ -150,6 +151,7 @@ public class SelectionFragment extends Fragment {
 		String challenge = ((ChallengeMeApplication) getActivity()
         .getApplication())
         .getSelectedChallenges().get(0);
+		
 		String fromUser = ((ChallengeMeApplication) getActivity()
 	            .getApplication())
 	            .getFromUser().get(0);
@@ -287,6 +289,9 @@ public class SelectionFragment extends Fragment {
 	
 	
 	private void makeMeRequest(final Session session) {
+		
+		
+		
 	    // Make an API call to get user data and define a 
 	    // new callback to handle the response.
 	    Request request = Request.newMeRequest(session, 
@@ -296,11 +301,19 @@ public class SelectionFragment extends Fragment {
 	            // If the response is successful
 	            if (session == Session.getActiveSession()) {
 	                if (user != null) {
+	                	List<String> name = new ArrayList<String>();
 	                    // Set the id for the ProfilePictureView
 	                    // view that in turn displays the profile picture.
 	                    profilePictureView.setProfileId(user.getId());
 	                    // Set the Textview's text to the user's name.
 	                    userNameView.setText(user.getName());
+	                    
+	                    name.add(user.getName());
+	            	    
+	            	    ((ChallengeMeApplication) getActivity()
+	            	            .getApplication())
+	            	            .setFromUser(name);
+	                    
 	                }
 	            }
 	            if (response.getError() != null) {
