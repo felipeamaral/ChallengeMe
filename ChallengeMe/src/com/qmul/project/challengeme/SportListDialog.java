@@ -49,8 +49,6 @@ public class SportListDialog extends DialogFragment {
 								
 							}
 							
-							 
-							
 							((ChallengeMeApplication) getActivity()
 						             .getApplication())
 						             .setIsSportSelected(isSelected);
