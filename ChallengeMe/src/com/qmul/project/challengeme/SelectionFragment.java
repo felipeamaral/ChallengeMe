@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -239,6 +241,8 @@ public class SelectionFragment extends Fragment {
 												"Request sent",
 												Toast.LENGTH_SHORT).show();
 										saveChallenge();
+										Intent intent = new Intent(getActivity(),MainActivity.class);
+										getActivity().startActivity(intent);
 									} else {
 										Toast.makeText(getActivity().getApplicationContext(),
 												"Request Cancelled",

@@ -50,9 +50,10 @@ public class MainActivity extends FragmentActivity {
 	private void showFragment(int fragmentIndex, boolean addToBackStack) {
 	    FragmentManager fm = getSupportFragmentManager();
 	    FragmentTransaction transaction = fm.beginTransaction();
+
 	    for (int i = 0; i < fragments.length; i++) {
 	        if (i == fragmentIndex) {
-	            transaction.show(fragments[i]);
+	        	transaction.show(fragments[i]);
 	        } else {
 	            transaction.hide(fragments[i]);
 	        }
@@ -88,7 +89,7 @@ public class MainActivity extends FragmentActivity {
 	    }
 	    
 	    if (item.getItemId()==R.id.challenges) {
-	    	fragments[HISTORY].onDetach();
+	    	
 	        showFragment(HISTORY, true);
 	        return true;
 	    } 
