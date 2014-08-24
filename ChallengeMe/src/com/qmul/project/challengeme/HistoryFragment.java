@@ -48,7 +48,7 @@ public class HistoryFragment extends Fragment {
 	    int numberOfChallenges = db.countRow();
 	    
 	    if(numberOfChallenges == 0){
-	    	listElements.add(new ChallengeElement(0, null ,"No Challenges in history",null, null, null, null));
+	    	listElements.add(new ChallengeElement(0, "" ,"No Challenges in history","" , "" , "" , "" ));
 		    
 	    } else {
 	    	List<ChallengeLog> list = db.getAllChallenges();
